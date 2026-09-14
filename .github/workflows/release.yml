@@ -25,7 +25,7 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          echo "$KEYSTORE_BASE64" | base64 --decode > android/upload-keystore.jks
+          echo "$KEYSTORE_BASE64" | base64 --decode --ignore-garbage > android/upload-keystore.jks
           cat > android/key.properties <<EOT
           storePassword=$KEYSTORE_PASSWORD
           keyPassword=$KEY_PASSWORD
