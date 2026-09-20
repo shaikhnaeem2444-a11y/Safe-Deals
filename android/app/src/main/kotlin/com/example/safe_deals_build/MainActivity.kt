@@ -1,4 +1,4 @@
-package com.example.safe_deals_build
+package com.safedeals.app
 
 import io.flutter.embedding.android.FlutterActivity
 
