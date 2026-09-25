@@ -25,7 +25,16 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          echo "$KEYSTORE_BASE64" | base64 --decode --ignore-garbage > android/app/upload-keystore.jks
+          KEYSTORE_BASE64_CLEAN=$(printf '%s' "$KEYSTORE_BASE64" | tr -d '[:space:]')
+
+          case $((${#KEYSTORE_BASE64_CLEAN} % 4)) in
+            2) KEYSTORE_BASE64_CLEAN="${KEYSTORE_BASE64_CLEAN}==" ;;
+            3) KEYSTORE_BASE64_CLEAN="${KEYSTORE_BASE64_CLEAN}=" ;;
+            1) echo "Invalid KEYSTORE_BASE64 length"; exit 1 ;;
+          esac
+
+          printf '%s' "$KEYSTORE_BASE64_CLEAN" | base64 --decode > android/app/upload-keystore.jks
+
           cat > android/key.properties <<EOT
           storePassword=$KEYSTORE_PASSWORD
           keyPassword=$KEY_PASSWORD
