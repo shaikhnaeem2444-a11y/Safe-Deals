@@ -25,22 +25,28 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          KEYSTORE_BASE64_CLEAN=$(printf '%s' "$KEYSTORE_BASE64" | tr -d '[:space:]')
+          printf '%s' "$KEYSTORE_BASE64" | tr -d '[:space:]' > /tmp/keystore.b64
 
-          case $((${#KEYSTORE_BASE64_CLEAN} % 4)) in
-            2) KEYSTORE_BASE64_CLEAN="${KEYSTORE_BASE64_CLEAN}==" ;;
-            3) KEYSTORE_BASE64_CLEAN="${KEYSTORE_BASE64_CLEAN}=" ;;
-            1) echo "Invalid KEYSTORE_BASE64 length"; exit 1 ;;
-          esac
+          if ! base64 --decode /tmp/keystore.b64 > android/app/upload-keystore.jks 2>/tmp/base64-error.txt; then
+            echo "KEYSTORE_BASE64 is invalid."
+            cat /tmp/base64-error.txt
+            exit 1
+          fi
 
-          printf '%s' "$KEYSTORE_BASE64_CLEAN" | base64 --decode > android/app/upload-keystore.jks
-
-          cat > android/key.properties <<EOT
+          cat > android/key.properties <<EOF
           storePassword=$KEYSTORE_PASSWORD
           keyPassword=$KEY_PASSWORD
           keyAlias=$KEY_ALIAS
           storeFile=upload-keystore.jks
-          EOT
+          EOF
+
+      - name: Verify upload keystore
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: |
+          keytool -list \
+            -keystore android/app/upload-keystore.jks \
+            -storepass "$KEYSTORE_PASSWORD" > /dev/null
 
       - name: Flutter dependencies
         run: flutter pub get
