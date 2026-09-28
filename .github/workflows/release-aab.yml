@@ -1,0 +1,104 @@
+name: Safe Deals Release AAB
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.3'
+          channel: stable
+          cache: true
+
+      - name: Get Flutter packages
+        run: flutter pub get
+
+      - name: Configure release signing
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          set -e
+
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "ERROR: KEYSTORE_BASE64 secret is empty."
+            exit 1
+          fi
+
+          if [ -z "$KEYSTORE_PASSWORD" ]; then
+            echo "ERROR: KEYSTORE_PASSWORD secret is empty."
+            exit 1
+          fi
+
+          if [ -z "$KEY_ALIAS" ]; then
+            echo "ERROR: KEY_ALIAS secret is empty."
+            exit 1
+          fi
+
+          if [ -z "$KEY_PASSWORD" ]; then
+            echo "ERROR: KEY_PASSWORD secret is empty."
+            exit 1
+          fi
+
+          mkdir -p android/app
+
+          printf '%s' "$KEYSTORE_BASE64" | tr -d '\r\n ' | base64 --decode > android/app/upload-keystore.jks
+
+          if [ ! -s android/app/upload-keystore.jks ]; then
+            echo "ERROR: Keystore file was not created."
+            exit 1
+          fi
+
+          cat > android/key.properties <<EOF
+          storePassword=$KEYSTORE_PASSWORD
+          keyPassword=$KEY_PASSWORD
+          keyAlias=$KEY_ALIAS
+          storeFile=upload-keystore.jks
+          EOF
+
+          echo "Release signing files configured successfully."
+
+      - name: Flutter clean
+        run: flutter clean
+
+      - name: Build release AAB
+        run: flutter build appbundle --release
+
+      - name: Verify AAB
+        run: |
+          set -e
+
+          AAB_FILE=$(find build/app/outputs/bundle/release -type f -name "*.aab" | head -n 1)
+
+          if [ -z "$AAB_FILE" ]; then
+            echo "ERROR: Release AAB was not created."
+            exit 1
+          fi
+
+          echo "AAB created successfully:"
+          echo "$AAB_FILE"
+
+          ls -lh "$AAB_FILE"
+
+      - name: Upload release AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: Safe-Deals-release-AAB
+          path: build/app/outputs/bundle/release/*.aab
+          if-no-files-found: error
