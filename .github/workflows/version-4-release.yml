@@ -1,0 +1,99 @@
+name: Safe Deals Version 4 Release AAB
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.3'
+          channel: stable
+          cache: true
+
+      - name: Set Version 4
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path("pubspec.yaml")
+          text = p.read_text()
+
+          import re
+          text = re.sub(
+              r'^version:\s*.*$',
+              'version: 1.0.3+4',
+              text,
+              count=1,
+              flags=re.MULTILINE
+          )
+
+          p.write_text(text)
+          print("Version set to 1.0.3+4")
+          PY
+
+      - name: Decode existing signing keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import base64
+          from pathlib import Path
+
+          value = os.environ["KEYSTORE_BASE64"]
+          value = "".join(value.split())
+
+          missing = (-len(value)) % 4
+          value += "=" * missing
+
+          data = base64.b64decode(value, validate=True)
+
+          Path("android/app/upload-keystore.jks").write_bytes(data)
+
+          print("Existing signing keystore decoded successfully.")
+          PY
+
+      - name: Create key.properties
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          cat > android/key.properties <<EOF
+          storePassword=${KEYSTORE_PASSWORD}
+          keyPassword=${KEY_PASSWORD}
+          keyAlias=${KEY_ALIAS}
+          storeFile=upload-keystore.jks
+          EOF
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build release signed AAB
+        run: flutter build appbundle --release
+
+      - name: Verify AAB
+        run: |
+          test -f build/app/outputs/bundle/release/app-release.aab
+          ls -lh build/app/outputs/bundle/release/app-release.aab
+
+      - name: Upload Version 4 AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: Safe-Deals-Version-4-release-AAB
+          path: build/app/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
