@@ -3,6 +3,9 @@ name: Safe Deals Version 4 Release AAB
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build-release:
     runs-on: ubuntu-latest
@@ -28,11 +31,11 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
 
           p = Path("pubspec.yaml")
           text = p.read_text()
 
-          import re
           text = re.sub(
               r'^version:\s*.*$',
               'version: 1.0.3+4',
@@ -60,7 +63,7 @@ jobs:
           missing = (-len(value)) % 4
           value += "=" * missing
 
-          data = base64.b64decode(value, validate=True)
+          data = base64.b64decode(value)
 
           Path("android/app/upload-keystore.jks").write_bytes(data)
 
@@ -79,6 +82,18 @@ jobs:
           keyAlias=${KEY_ALIAS}
           storeFile=upload-keystore.jks
           EOF
+
+      - name: Verify signing credentials
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          keytool -list -v \
+            -keystore android/app/upload-keystore.jks \
+            -storepass "$KEYSTORE_PASSWORD" \
+            -alias "$KEY_ALIAS" \
+            -keypass "$KEY_PASSWORD"
 
       - name: Get dependencies
         run: flutter pub get
