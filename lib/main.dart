@@ -86,7 +86,14 @@ class TrustScreen extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(10),
                                     ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => const BankLinkingScreen(),
+    ),
+  );
+},
                                 child: const Text(
                                     'Aage Badhein (Continue)',
                                     style: TextStyle(fontSize: 18, color: Colors.white),
