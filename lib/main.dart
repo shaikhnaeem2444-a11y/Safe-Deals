@@ -90,7 +90,7 @@ class TrustScreen extends StatelessWidget {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => const BankLinkingScreen(),
+      builder: (context) =>  BankLinkingScreen(),
     ),
   );
 },
