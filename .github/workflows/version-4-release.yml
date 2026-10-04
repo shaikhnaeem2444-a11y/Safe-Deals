@@ -38,14 +38,14 @@ jobs:
 
           text = re.sub(
               r'^version:\s*.*$',
-              'version: 1.0.3+8',
+              'version: 1.0.3+9',
               text,
               count=1,
               flags=re.MULTILINE
           )
 
           p.write_text(text)
-          print("Version set to 1.0.3+8")
+          print("Version set to 1.0.3+9")
           PY
 
       - name: Decode existing signing keystore
