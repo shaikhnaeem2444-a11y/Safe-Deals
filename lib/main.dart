@@ -184,9 +184,15 @@ class BankLinkingScreen extends StatelessWidget {
             ),
             SizedBox(height: 25),
             ElevatedButton(
-              onPressed: () {
-                print("Bank Account Linked Successfully");
-              },
+            onPressed: () {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => const ProfileSelfieScreen(),
+    ),
+  );
+},   
+                
               style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
               child: Text("Verify & Link Bank", style: TextStyle(color: Colors.white)),
             ),
