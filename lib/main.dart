@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:camera/camera.dart';
 void main() {
     runApp(const SafeDealsApp());
 }
@@ -202,49 +202,164 @@ class BankLinkingScreen extends StatelessWidget {
     );
   }
 }
-class ProfileSelfieScreen extends StatelessWidget {
+class ProfileSelfieScreen extends StatefulWidget {
+  const ProfileSelfieScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileSelfieScreen> createState() => _ProfileSelfieScreenState();
+}
+
+class _ProfileSelfieScreenState extends State<ProfileSelfieScreen> {
+  CameraController? _cameraController;
+  bool _cameraReady = false;
+  bool _photoTaken = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _openCamera();
+  }
+
+  Future<void> _openCamera() async {
+    try {
+      final cameras = await availableCameras();
+
+      if (cameras.isEmpty) {
+        return;
+      }
+
+      final frontCamera = cameras.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.front,
+        orElse: () => cameras.first,
+      );
+
+      _cameraController = CameraController(
+        frontCamera,
+        ResolutionPreset.medium,
+        enableAudio: false,
+      );
+
+      await _cameraController!.initialize();
+
+      if (mounted) {
+        setState(() {
+          _cameraReady = true;
+        });
+      }
+    } catch (e) {
+      debugPrint("Camera error: $e");
+    }
+  }
+
+  Future<void> _takeSelfie() async {
+    if (_cameraController == null ||
+        !_cameraController!.value.isInitialized) {
+      return;
+    }
+
+    try {
+      await _cameraController!.takePicture();
+
+      if (mounted) {
+        setState(() {
+          _photoTaken = true;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Selfie successfully captured!"),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint("Selfie error: $e");
+    }
+  }
+
+  @override
+  void dispose() {
+    _cameraController?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile Selfie Verification"),
+        title: const Text("Profile Selfie Verification"),
         backgroundColor: Colors.teal,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Icon(Icons.camera_alt, size: 80, color: Colors.teal),
-            SizedBox(height: 20),
+            Expanded(
+              child: _cameraReady
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: CameraPreview(_cameraController!),
+                    )
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+            ),
+
+            const SizedBox(height: 15),
+
             Text(
-              "Apni Live Selfie Capture Karein",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              _photoTaken
+                  ? "Selfie Successfully Captured"
+                  : "Apni Live Selfie Capture Karein",
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 10),
+
+            const SizedBox(height: 10),
+
             Text(
-              "Account ko fully verify karne aur 100% bharosemand banane ke liye apni ek clear photo upload karein.",
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              _photoTaken
+                  ? "Aapki selfie capture ho gayi hai."
+                  : "Account ko fully verify karne ke liye apni clear live selfie capture karein.",
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 30),
+
+            const SizedBox(height: 20),
+
             ElevatedButton.icon(
-              onPressed: () {
-                print("Camera opened for Selfie verification");
-              },
-              icon: Icon(Icons.camera, color: Colors.white),
-              label: Text("Selfie Khinchein", style: TextStyle(color: Colors.white)),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
+              onPressed: _cameraReady ? _takeSelfie : null,
+              icon: const Icon(
+                Icons.camera_alt,
+                color: Colors.white,
+              ),
+              label: Text(
+                _photoTaken ? "Selfie Dobara Khinchein" : "Selfie Khinchein",
+                style: const TextStyle(color: Colors.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal,
+                minimumSize: const Size(double.infinity, 50),
+              ),
             ),
-            SizedBox(height: 15),
+
+            const SizedBox(height: 15),
+
             OutlinedButton(
-              onPressed: () {
-                print("Verification Completed! Moving to Dashboard");
-              },
-              child: Text("Verification Complete Karein"),
+              onPressed: _photoTaken
+                  ? () {
+                      Navigator.pop(context);
+                    }
+                  : null,
+              child: const Text("Verification Complete Karein"),
             ),
+
+            const SizedBox(height: 10),
           ],
         ),
       ),
