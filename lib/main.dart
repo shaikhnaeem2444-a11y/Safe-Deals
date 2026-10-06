@@ -21,13 +21,13 @@ class SafeDealsApp extends StatelessWidget {
         colorSchemeSeed: Colors.green,
         scaffoldBackgroundColor: const Color(0xFFF8FAF8),
       ),
-      home: const TrustScreen(),
+      home: const WelcomeScreen(),
     );
   }
 }
 
 // ============================================================
-// APP DATA
+// DATA MODEL
 // ============================================================
 
 class VehicleListing {
@@ -55,21 +55,21 @@ class VehicleListing {
 final List<VehicleListing> vehicleListings = [];
 
 // ============================================================
-// COMMON UI
+// COMMON HELPERS
 // ============================================================
 
-InputDecoration fieldDecoration(
+InputDecoration inputDecoration(
   String label, {
   IconData? icon,
 }) {
   return InputDecoration(
     labelText: label,
     prefixIcon: icon == null ? null : Icon(icon),
+    filled: true,
+    fillColor: Colors.white,
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
     ),
-    filled: true,
-    fillColor: Colors.white,
   );
 }
 
@@ -80,77 +80,77 @@ void showMessage(BuildContext context, String message) {
 }
 
 // ============================================================
-// WELCOME
+// WELCOME SCREEN
 // ============================================================
 
-class TrustScreen extends StatelessWidget {
-  const TrustScreen({super.key});
+class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(22),
           child: Column(
             children: [
-              const SizedBox(height: 25),
+              const SizedBox(height: 28),
 
               const Icon(
                 Icons.verified_user,
-                size: 85,
                 color: Colors.green,
+                size: 82,
               ),
 
               const SizedBox(height: 18),
 
               const Text(
                 'Welcome to Safe-Deals',
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 29,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
-                textAlign: TextAlign.center,
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
 
               const Text(
-                'Aapka apna secure aur trusted vehicle marketplace.',
+                'Aapka apna secure aur trusted vehicle platform.',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey,
                 ),
-                textAlign: TextAlign.center,
               ),
 
               const SizedBox(height: 35),
 
               _feature(
                 Icons.lock_outline,
-                'Secure Platform',
-                'Safe aur trusted vehicle transactions ke liye.',
+                'Login se pehle Subscription',
+                'Security ke liye subscription zaroori hai.',
               ),
 
               _feature(
                 Icons.account_balance,
-                'Bank-Linked Account',
-                'Account verification ke liye bank details.',
+                'Bank-Linked Number Only',
+                'Bank account se linked number ka use karein.',
               ),
 
               _feature(
                 Icons.camera_alt_outlined,
-                'Live Selfie',
-                'Real user profile verification.',
+                'Real Live Selfie Profile',
+                'Fake photo nahi, live selfie verification.',
               ),
 
               _feature(
                 Icons.directions_car,
                 'Vehicles Only',
-                'Sirf vehicles ki buying aur selling.',
+                'Safe-Deals par sirf vehicles allowed hain.',
               ),
 
-              const SizedBox(height: 35),
+              const SizedBox(height: 30),
 
               SizedBox(
                 width: double.infinity,
@@ -196,13 +196,17 @@ class TrustScreen extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: Colors.green.withOpacity(.15),
+          color: Colors.green.withOpacity(0.12),
         ),
       ),
       child: Row(
         children: [
-          CircleAvatar(
-            backgroundColor: Colors.green.withOpacity(.10),
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.green.withOpacity(0.10),
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: Icon(
               icon,
               color: Colors.green,
@@ -216,16 +220,16 @@ class TrustScreen extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold,
                     fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 3),
                 Text(
                   subtitle,
                   style: const TextStyle(
-                    color: Colors.grey,
                     fontSize: 13,
+                    color: Colors.grey,
                   ),
                 ),
               ],
@@ -249,8 +253,7 @@ class BankLinkingScreen extends StatefulWidget {
       _BankLinkingScreenState();
 }
 
-class _BankLinkingScreenState
-    extends State<BankLinkingScreen> {
+class _BankLinkingScreenState extends State<BankLinkingScreen> {
   final accountController = TextEditingController();
   final ifscController = TextEditingController();
 
@@ -284,7 +287,7 @@ class _BankLinkingScreenState
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => ProfileSelfieScreen(
+        builder: (_) => SelfieScreen(
           accountNumber: account,
           ifscCode: ifsc,
         ),
@@ -309,18 +312,18 @@ class _BankLinkingScreenState
               const Text(
                 'Apna Bank Account Jodein',
                 style: TextStyle(
-                  fontSize: 27,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
 
               const Text(
-                'Safe-Deals verification ke liye apni bank details enter karein.',
+                'Safe-Deals par secure payment ke liye apna bank details enter karein.',
                 style: TextStyle(
-                  color: Colors.grey,
                   fontSize: 15,
+                  color: Colors.grey,
                 ),
               ),
 
@@ -330,7 +333,7 @@ class _BankLinkingScreenState
                 controller: accountController,
                 keyboardType: TextInputType.number,
                 maxLength: 18,
-                decoration: fieldDecoration(
+                decoration: inputDecoration(
                   'Account Number',
                   icon: Icons.account_balance,
                 ).copyWith(counterText: ''),
@@ -343,13 +346,13 @@ class _BankLinkingScreenState
                 textCapitalization:
                     TextCapitalization.characters,
                 maxLength: 11,
-                decoration: fieldDecoration(
+                decoration: inputDecoration(
                   'IFSC Code',
                   icon: Icons.code,
                 ).copyWith(counterText: ''),
               ),
 
-              const SizedBox(height: 25),
+              const SizedBox(height: 24),
 
               SizedBox(
                 height: 54,
@@ -369,12 +372,12 @@ class _BankLinkingScreenState
               const SizedBox(height: 15),
 
               const Text(
-                'Note: Real bank ownership verification ke liye secure bank-verification API/backend required hoga.',
+                'Real bank ownership verification ke liye secure bank API/backend required hoga.',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
                 ),
-                textAlign: TextAlign.center,
               ),
             ],
           ),
@@ -388,24 +391,23 @@ class _BankLinkingScreenState
 // SELFIE
 // ============================================================
 
-class ProfileSelfieScreen extends StatefulWidget {
+class SelfieScreen extends StatefulWidget {
   final String accountNumber;
   final String ifscCode;
 
-  const ProfileSelfieScreen({
+  const SelfieScreen({
     super.key,
     required this.accountNumber,
     required this.ifscCode,
   });
 
   @override
-  State<ProfileSelfieScreen> createState() =>
-      _ProfileSelfieScreenState();
+  State<SelfieScreen> createState() => _SelfieScreenState();
 }
 
-class _ProfileSelfieScreenState
-    extends State<ProfileSelfieScreen> {
-  CameraController? controller;
+class _SelfieScreenState extends State<SelfieScreen> {
+  CameraController? cameraController;
+
   bool cameraReady = false;
   bool photoTaken = false;
   bool cameraError = false;
@@ -421,33 +423,42 @@ class _ProfileSelfieScreenState
       final cameras = await availableCameras();
 
       if (cameras.isEmpty) {
+        if (!mounted) return;
+
         setState(() {
           cameraError = true;
         });
         return;
       }
 
-      final front = cameras.where(
-        (camera) =>
-            camera.lensDirection ==
-            CameraLensDirection.front,
-      );
+      CameraDescription selectedCamera = cameras.first;
 
-      final selected =
-          front.isNotEmpty ? front.first : cameras.first;
+      for (final camera in cameras) {
+        if (camera.lensDirection ==
+            CameraLensDirection.front) {
+          selectedCamera = camera;
+          break;
+        }
+      }
 
-      controller = CameraController(
-        selected,
+      final controller = CameraController(
+        selectedCamera,
         ResolutionPreset.medium,
         enableAudio: false,
       );
 
-      await controller!.initialize();
+      await controller.initialize();
 
-      if (!mounted) return;
+      if (!mounted) {
+        await controller.dispose();
+        return;
+      }
+
+      cameraController = controller;
 
       setState(() {
         cameraReady = true;
+        cameraError = false;
       });
     } catch (e) {
       if (!mounted) return;
@@ -455,17 +466,21 @@ class _ProfileSelfieScreenState
       setState(() {
         cameraError = true;
       });
+
+      debugPrint('Camera error: $e');
     }
   }
 
   Future<void> takeSelfie() async {
+    final controller = cameraController;
+
     if (controller == null ||
-        !controller!.value.isInitialized) {
+        !controller.value.isInitialized) {
       return;
     }
 
     try {
-      await controller!.takePicture();
+      await controller.takePicture();
 
       if (!mounted) return;
 
@@ -475,14 +490,20 @@ class _ProfileSelfieScreenState
 
       showMessage(
         context,
-        'Selfie successfully captured!',
+        'Selfie successfully captured.',
       );
-    } catch (_) {
+    } catch (e) {
       showMessage(
         context,
         'Selfie capture nahi ho saka.',
       );
     }
+  }
+
+  void retakeSelfie() {
+    setState(() {
+      photoTaken = false;
+    });
   }
 
   void completeVerification() {
@@ -501,7 +522,7 @@ class _ProfileSelfieScreenState
 
   @override
   void dispose() {
-    controller?.dispose();
+    cameraController?.dispose();
     super.dispose();
   }
 
@@ -519,36 +540,20 @@ class _ProfileSelfieScreenState
           child: Column(
             children: [
               Expanded(
-                child: cameraError
-                    ? const Center(
-                        child: Text(
-                          'Camera open nahi ho saka.',
-                          style: TextStyle(fontSize: 17),
-                        ),
-                      )
-                    : !cameraReady
-                        ? const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : ClipRRect(
-                            borderRadius:
-                                BorderRadius.circular(18),
-                            child:
-                                CameraPreview(controller!),
-                          ),
+                child: _cameraView(),
               ),
 
-              const SizedBox(height: 15),
+              const SizedBox(height: 14),
 
               Text(
                 photoTaken
                     ? 'Selfie Successfully Captured'
                     : 'Apni Live Selfie Capture Karein',
+                textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
-                textAlign: TextAlign.center,
               ),
 
               const SizedBox(height: 8),
@@ -556,7 +561,8 @@ class _ProfileSelfieScreenState
               Text(
                 photoTaken
                     ? 'Aapki selfie capture ho gayi hai.'
-                    : 'Clear live selfie capture karein.',
+                    : 'Account verification ke liye clear live selfie capture karein.',
+                textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Colors.grey,
                 ),
@@ -569,7 +575,11 @@ class _ProfileSelfieScreenState
                 height: 52,
                 child: ElevatedButton.icon(
                   onPressed:
-                      cameraReady ? takeSelfie : null,
+                      cameraReady
+                          ? (photoTaken
+                              ? retakeSelfie
+                              : takeSelfie)
+                          : null,
                   icon: const Icon(Icons.camera_alt),
                   label: Text(
                     photoTaken
@@ -578,180 +588,4 @@ class _ProfileSelfieScreenState
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.teal,
-                    foregroundColor: Colors.white,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: OutlinedButton(
-                  onPressed:
-                      photoTaken ? completeVerification : null,
-                  child: const Text(
-                    'Verification Complete Karein',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ============================================================
-// VERIFICATION SUCCESS
-// ============================================================
-
-class VerificationSuccessScreen extends StatelessWidget {
-  final String accountNumber;
-  final String ifscCode;
-
-  const VerificationSuccessScreen({
-    super.key,
-    required this.accountNumber,
-    required this.ifscCode,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.check_circle,
-                color: Colors.green,
-                size: 105,
-              ),
-
-              const SizedBox(height: 20),
-
-              const Text(
-                'Verification Complete!',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-
-              const SizedBox(height: 12),
-
-              const Text(
-                'Aapka verification flow successfully complete ho gaya.',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
-                textAlign: TextAlign.center,
-              ),
-
-              const SizedBox(height: 30),
-
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(.08),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      'Account: •••• ${accountNumber.substring(accountNumber.length - 4)}',
-                    ),
-                    const SizedBox(height: 8),
-                    Text('IFSC: $ifscCode'),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const HomeScreen(),
-                      ),
-                      (_) => false,
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                  ),
-                  child: const Text(
-                    'Safe-Deals Start Karein',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ============================================================
-// HOME
-// ============================================================
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Safe-Deals'),
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
-      ),
-      body: GridView.count(
-        padding: const EdgeInsets.all(18),
-        crossAxisCount: 2,
-        crossAxisSpacing: 14,
-        mainAxisSpacing: 14,
-        children: [
-          _homeCard(
-            context,
-            Icons.add_circle,
-            'Sell Vehicle',
-            () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const AddVehicleScreen(),
-                ),
-              );
-            },
-          ),
-
-          _homeCard(
-            context,
-            Icons.search,
-            'Browse Vehicles',
-            () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const BrowseVehiclesScreen(),
-                ),
-           
+                    foregroundColor: Colors.white
