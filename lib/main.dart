@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
@@ -39,11 +37,11 @@ class WelcomeScreen extends StatelessWidget {
           padding: const EdgeInsets.all(24),
           child: Column(
             children: [
-              const SizedBox(height: 35),
+              const SizedBox(height: 45),
               const Icon(
                 Icons.verified_user,
-                size: 90,
                 color: Colors.green,
+                size: 90,
               ),
               const SizedBox(height: 24),
               const Text(
@@ -56,30 +54,30 @@ class WelcomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                'Aapka apna secure aur trusted vehicle marketplace.',
+                'Aapka apna secure aur trusted vehicle platform.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 17,
                   color: Colors.grey.shade600,
                 ),
               ),
-              const SizedBox(height: 35),
+              const SizedBox(height: 40),
               const Feature(
-                icon: Icons.lock_outline,
-                title: 'Login se pehle Subscription',
-                subtitle: 'Security ke liye subscription zaroori hai.',
+                Icons.lock_outline,
+                'Login se pehle Subscription',
+                'Security ke liye active subscription required hai.',
               ),
               const SizedBox(height: 18),
               const Feature(
-                icon: Icons.account_balance_outlined,
-                title: 'Bank-Linked Number Only',
-                subtitle: 'Bank account se linked mobile number use karein.',
+                Icons.account_balance_outlined,
+                'Bank-Linked Number Only',
+                'Bank account se linked mobile number use karein.',
               ),
               const SizedBox(height: 18),
               const Feature(
-                icon: Icons.camera_alt_outlined,
-                title: 'Real Live Selfie Profile',
-                subtitle: 'Verification ke liye live selfie capture karein.',
+                Icons.camera_alt_outlined,
+                'Real Live Selfie Profile',
+                'Verification ke liye live selfie required hai.',
               ),
               const Spacer(),
               SizedBox(
@@ -124,11 +122,11 @@ class Feature extends StatelessWidget {
   final String title;
   final String subtitle;
 
-  const Feature({
+  const Feature(
+    this.icon,
+    this.title,
+    this.subtitle, {
     super.key,
-    required this.icon,
-    required this.title,
-    required this.subtitle,
   });
 
   @override
@@ -156,7 +154,7 @@ class Feature extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 17,
+                  fontSize: 18,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -211,14 +209,13 @@ class SubscriptionScreen extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.grey.shade600,
-              fontSize: 15,
             ),
           ),
           const SizedBox(height: 30),
-          const Benefit(text: 'Secure vehicle marketplace access'),
-          const Benefit(text: 'Verified profile process'),
-          const Benefit(text: 'Bank-linked mobile number process'),
-          const Benefit(text: 'Vehicle-only platform'),
+          const Benefit('Secure vehicle marketplace access'),
+          const Benefit('Verified profile process'),
+          const Benefit('Bank-linked mobile number process'),
+          const Benefit('Vehicle-only platform'),
           const Spacer(),
           SizedBox(
             width: double.infinity,
@@ -247,12 +244,16 @@ class SubscriptionScreen extends StatelessWidget {
   }
 }
 
+// ============================================================
+// BENEFIT
+// ============================================================
+
 class Benefit extends StatelessWidget {
   final String text;
 
-  const Benefit({
+  const Benefit(
+    this.text, {
     super.key,
-    required this.text,
   });
 
   @override
@@ -269,7 +270,9 @@ class Benefit extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(
+                fontSize: 16,
+              ),
             ),
           ),
         ],
@@ -290,7 +293,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginScreen> {
-  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController phoneController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -304,7 +308,9 @@ class _LoginState extends State<LoginScreen> {
     if (phone.length != 10) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Valid 10-digit mobile number enter karein.'),
+          content: Text(
+            'Valid 10-digit mobile number enter karein.',
+          ),
         ),
       );
       return;
@@ -325,7 +331,7 @@ class _LoginState extends State<LoginScreen> {
       color: Colors.green,
       child: Column(
         children: [
-          const SizedBox(height: 25),
+          const SizedBox(height: 30),
           const Icon(
             Icons.phone_android,
             size: 80,
@@ -334,7 +340,6 @@ class _LoginState extends State<LoginScreen> {
           const SizedBox(height: 20),
           const Text(
             'Mobile Number Login',
-            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.w800,
@@ -388,10 +393,12 @@ class BankLinkingScreen extends StatefulWidget {
   const BankLinkingScreen({super.key});
 
   @override
-  State<BankLinkingScreen> createState() => _BankLinkingState();
+  State<BankLinkingScreen> createState() =>
+      _BankLinkingScreenState();
 }
 
-class _BankLinkingState extends State<BankLinkingScreen> {
+class _BankLinkingScreenState
+    extends State<BankLinkingScreen> {
   final TextEditingController accountController =
       TextEditingController();
 
@@ -423,7 +430,9 @@ class _BankLinkingState extends State<BankLinkingScreen> {
     if (account.length < 8) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Valid Account Number enter karein.'),
+          content: Text(
+            'Valid bank account number enter karein.',
+          ),
         ),
       );
       return;
@@ -432,7 +441,9 @@ class _BankLinkingState extends State<BankLinkingScreen> {
     if (ifsc.length < 11) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Valid IFSC Code enter karein.'),
+          content: Text(
+            'Valid 11-character IFSC Code enter karein.',
+          ),
         ),
       );
       return;
@@ -512,7 +523,7 @@ class _BankLinkingState extends State<BankLinkingScreen> {
 }
 
 // ============================================================
-// SELFIE CAMERA
+// REAL CAMERA SELFIE SCREEN
 // ============================================================
 
 class ProfileSelfieScreen extends StatefulWidget {
@@ -527,19 +538,17 @@ class _ProfileSelfieScreenState
     extends State<ProfileSelfieScreen> {
   CameraController? _cameraController;
 
-  XFile? _selfieFile;
-
   bool _cameraReady = false;
+  bool _photoTaken = false;
   bool _cameraError = false;
-  bool _capturing = false;
 
   @override
   void initState() {
     super.initState();
-    _initializeCamera();
+    _openCamera();
   }
 
-  Future<void> _initializeCamera() async {
+  Future<void> _openCamera() async {
     try {
       final cameras = await availableCameras();
 
@@ -575,44 +584,50 @@ class _ProfileSelfieScreenState
         return;
       }
 
+      _cameraController = controller;
+
       setState(() {
-        _cameraController = controller;
         _cameraReady = true;
         _cameraError = false;
       });
     } catch (e) {
-      debugPrint('Camera initialization error: $e');
-
       if (mounted) {
         setState(() {
           _cameraError = true;
         });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Camera open nahi ho paaya. Camera permission check karein.',
+            ),
+          ),
+        );
       }
     }
   }
 
-  Future<void> _captureSelfie() async {
+  Future<void> _takeSelfie() async {
     final controller = _cameraController;
 
     if (controller == null ||
-        !controller.value.isInitialized ||
-        _capturing) {
+        !controller.value.isInitialized) {
       return;
     }
 
-    setState(() {
-      _capturing = true;
-    });
+    if (controller.value.isTakingPicture) {
+      return;
+    }
 
     try {
-      final file = await controller.takePicture();
+      await controller.takePicture();
 
       if (!mounted) {
         return;
       }
 
       setState(() {
-        _selfieFile = file;
+        _photoTaken = true;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -623,28 +638,30 @@ class _ProfileSelfieScreenState
         ),
       );
     } catch (e) {
-      debugPrint('Selfie capture error: $e');
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
-              'Selfie capture nahi ho saki. Dobara try karein.',
+              'Selfie capture nahi ho paayi. Dobara try karein.',
             ),
           ),
         );
       }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _capturing = false;
-        });
-      }
     }
   }
 
+  Future<void> _retakeSelfie() async {
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _photoTaken = false;
+    });
+  }
+
   void _completeVerification() {
-    if (_selfieFile == null) {
+    if (!_photoTaken) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -658,7 +675,7 @@ class _ProfileSelfieScreenState
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (_) => const VerificationSuccessScreen(),
+        builder: (_) => const HomeScreen(),
       ),
       (route) => false,
     );
@@ -686,46 +703,59 @@ class _ProfileSelfieScreenState
           child: Column(
             children: [
               Expanded(
-                child: _buildCameraArea(),
+                child: _cameraError
+                    ? _cameraErrorView()
+                    : _cameraReady
+                        ? ClipRRect(
+                            borderRadius:
+                                BorderRadius.circular(18),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: CameraPreview(
+                                _cameraController!,
+                              ),
+                            ),
+                          )
+                        : const Center(
+                            child: CircularProgressIndicator(),
+                          ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 16),
               Text(
-                _selfieFile == null
-                    ? 'Apni Live Selfie Capture Karein'
-                    : 'Selfie Successfully Captured',
+                _photoTaken
+                    ? 'Selfie Successfully Captured'
+                    : 'Apni Live Selfie Capture Karein',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: _selfieFile == null
-                      ? Colors.black87
-                      : Colors.green,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                _selfieFile == null
-                    ? 'Clear face ke saath live selfie capture karein.'
-                    : 'Aapki selfie verification ke liye ready hai.',
+                _photoTaken
+                    ? 'Aapki selfie verification ke liye ready hai.'
+                    : 'Account ko fully verify karne ke liye clear live selfie capture karein.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.grey.shade600,
                 ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton.icon(
-                  onPressed:
-                      _cameraReady && !_capturing
-                          ? _captureSelfie
-                          : null,
+                  onPressed: _cameraReady
+                      ? (_photoTaken
+                          ? _retakeSelfie
+                          : _takeSelfie)
+                      : null,
                   icon: const Icon(Icons.camera_alt),
                   label: Text(
-                    _selfieFile == null
-                        ? 'Selfie Khinchein'
-                        : 'Selfie Dobara Khinchein',
+                    _photoTaken
+                        ? 'Selfie Dobara Khinchein'
+                        : 'Selfie Khinchein',
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.teal,
@@ -738,10 +768,9 @@ class _ProfileSelfieScreenState
                 width: double.infinity,
                 height: 52,
                 child: OutlinedButton(
-                  onPressed:
-                      _selfieFile != null
-                          ? _completeVerification
-                          : null,
+                  onPressed: _photoTaken
+                      ? _completeVerification
+                      : null,
                   child: const Text(
                     'Verification Complete Karein',
                     style: TextStyle(
@@ -758,6 +787,785 @@ class _ProfileSelfieScreenState
     );
   }
 
-  Widget _buildCameraArea() {
-    if (_cameraError) {
-      return 
+  Widget _cameraErrorView() {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: const Center(
+        child: Padding(
+          padding: EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.camera_alt_outlined,
+                size: 70,
+                color: Colors.redAccent,
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Camera available nahi hai.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Camera permission allow karke dobara try karein.',
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ============================================================
+// HOME
+// ============================================================
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Safe-Deals',
+          style: TextStyle(
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(20),
+        children: [
+          Container(
+            padding: const EdgeInsets.all(22),
+            decoration: BoxDecoration(
+              color: Colors.green.shade50,
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.verified_user,
+                  color: Colors.green,
+                  size: 50,
+                ),
+                SizedBox(height: 12),
+                Text(
+                  'Welcome to Safe-Deals',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                SizedBox(height: 6),
+                Text(
+                  'Aapka secure vehicle marketplace.',
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 22),
+          HomeTile(
+            icon: Icons.directions_car,
+            title: 'Buy Vehicle',
+            subtitle: 'Verified vehicles browse karein.',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const VehicleListScreen(),
+                ),
+              );
+            },
+          ),
+          HomeTile(
+            icon: Icons.add_circle_outline,
+            title: 'Sell Vehicle',
+            subtitle: 'Apni vehicle listing create karein.',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const SellVehicleScreen(),
+                ),
+              );
+            },
+          ),
+          HomeTile(
+            icon: Icons.person_outline,
+            title: 'My Profile',
+            subtitle: 'Profile aur verification details dekhein.',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const ProfileScreen(),
+                ),
+              );
+            },
+          ),
+          HomeTile(
+            icon: Icons.security,
+            title: 'Safe-Deals Verification',
+            subtitle: 'Apna verification status dekhein.',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const VerificationScreen(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ============================================================
+// HOME TILE
+// ============================================================
+
+class HomeTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const HomeTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 14),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 18,
+          vertical: 8,
+        ),
+        leading: CircleAvatar(
+          backgroundColor: Colors.green.shade50,
+          child: Icon(
+            icon,
+            color: Colors.green,
+          ),
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        subtitle: Text(subtitle),
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          size: 17,
+        ),
+        onTap: onTap,
+      ),
+    );
+  }
+}
+
+// ============================================================
+// VEHICLE LIST
+// ============================================================
+
+class VehicleListScreen extends StatelessWidget {
+  const VehicleListScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final vehicles = [
+      {
+        'name': 'Hyundai Creta 2020',
+        'type': 'Car',
+        'price': '₹ 9,85,000',
+        'details': 'Diesel • 45,000 KM',
+      },
+      {
+        'name': 'Royal Enfield Classic 350',
+        'type': 'Bike',
+        'price': '₹ 1,45,000',
+        'details': '2019 • 21,000 KM',
+      },
+      {
+        'name': 'Mahindra 575 DI',
+        'type': 'Tractor',
+        'price': '₹ 5,20,000',
+        'details': '2018 • 1800 HR',
+      },
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Buy Vehicle'),
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          TextField(
+            decoration: InputDecoration(
+              hintText: 'Search vehicle...',
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+          const Text(
+            'Browse Vehicles',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 14),
+          ...vehicles.map(
+            (vehicle) => Card(
+              margin: const EdgeInsets.only(bottom: 14),
+              child: ListTile(
+                contentPadding: const EdgeInsets.all(14),
+                leading: CircleAvatar(
+                  radius: 28,
+                  backgroundColor: Colors.green.shade50,
+                  child: const Icon(
+                    Icons.directions_car,
+                    color: Colors.green,
+                  ),
+                ),
+                title: Text(
+                  vehicle['name']!,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(
+                  '${vehicle['type']} • ${vehicle['details']}',
+                ),
+                trailing: Text(
+                  vehicle['price']!,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => VehicleDetailsScreen(
+                        name: vehicle['name']!,
+                        type: vehicle['type']!,
+                        price: vehicle['price']!,
+                        details: vehicle['details']!,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ============================================================
+// VEHICLE DETAILS
+// ============================================================
+
+class VehicleDetailsScreen extends StatelessWidget {
+  final String name;
+  final String type;
+  final String price;
+  final String details;
+
+  const VehicleDetailsScreen({
+    required this.name,
+    required this.type,
+    required this.price,
+    required this.details,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Vehicle Details'),
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(20),
+        children: [
+          Container(
+            height: 210,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: const Icon(
+              Icons.directions_car,
+              size: 100,
+              color: Colors.green,
+            ),
+          ),
+          const SizedBox(height: 22),
+          Text(
+            name,
+            style: const TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            type,
+            style: TextStyle(
+              color: Colors.grey.shade600,
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            details,
+            style: const TextStyle(
+              fontSize: 17,
+            ),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            price,
+            style: const TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              color: Colors.green,
+            ),
+          ),
+          const SizedBox(height: 30),
+          SizedBox(
+            height: 54,
+            child: ElevatedButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Seller enquiry feature ready for next integration.',
+                    ),
+                  ),
+                );
+              },
+              child: const Text(
+                'Contact Seller',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ============================================================
+// SELL VEHICLE
+// ============================================================
+
+class SellVehicleScreen extends StatefulWidget {
+  const SellVehicleScreen({super.key});
+
+  @override
+  State<SellVehicleScreen> createState() =>
+      _SellVehicleScreenState();
+}
+
+class _SellVehicleScreenState
+    extends State<SellVehicleScreen> {
+  final TextEditingController nameController =
+      TextEditingController();
+
+  final TextEditingController modelController =
+      TextEditingController();
+
+  final TextEditingController priceController =
+      TextEditingController();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    modelController.dispose();
+    priceController.dispose();
+    super.dispose();
+  }
+
+  void _submitListing() {
+    if (nameController.text.trim().isEmpty ||
+        modelController.text.trim().isEmpty ||
+        priceController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Vehicle ki complete details enter karein.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Vehicle listing successfully prepared.',
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PageShell(
+      title: 'Sell Vehicle',
+      color: Colors.green,
+      child: ListView(
+        children: [
+          const Text(
+            'Apni Vehicle Sell Karein',
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            controller: nameController,
+            decoration: const InputDecoration(
+              labelText: 'Vehicle Name',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: modelController,
+            decoration: const InputDecoration(
+              labelText: 'Model / Year',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: priceController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              labelText: 'Expected Price',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 16),
+          OutlinedButton.icon(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Vehicle photo selection next integration ke liye ready hai.',
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(Icons.photo_camera),
+            label: const Text('Vehicle Photos Add Karein'),
+          ),
+          const SizedBox(height: 25),
+          SizedBox(
+            height: 54,
+            child: ElevatedButton(
+              onPressed: _submitListing,
+              child: const Text(
+                'Submit Vehicle Listing',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ============================================================
+// PROFILE
+// ============================================================
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Profile'),
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(20),
+        children: [
+          const CircleAvatar(
+            radius: 48,
+            backgroundColor: Colors.green,
+            child: Icon(
+              Icons.person,
+              size: 55,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 20),
+          const Center(
+            child: Text(
+              'Safe-Deals User',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 25),
+          const ProfileInfo(
+            icon: Icons.phone,
+            title: 'Mobile Verification',
+            value: 'Verified',
+          ),
+          const ProfileInfo(
+            icon: Icons.account_balance,
+            title: 'Bank Verification',
+            value: 'Completed',
+          ),
+          const ProfileInfo(
+            icon: Icons.camera_alt,
+            title: 'Selfie Verification',
+            value: 'Completed',
+          ),
+          const ProfileInfo(
+            icon: Icons.verified_user,
+            title: 'Account Status',
+            value: 'Verified',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ============================================================
+// PROFILE INFO
+// ============================================================
+
+class ProfileInfo extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String value;
+
+  const ProfileInfo({
+    required this.icon,
+    required this.title,
+    required this.value,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: ListTile(
+        leading: Icon(
+          icon,
+          color: Colors.green,
+        ),
+        title: Text(title),
+        trailing: Text(
+          value,
+          style: const TextStyle(
+            color: Colors.green,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ============================================================
+// VERIFICATION
+// ============================================================
+
+class VerificationScreen extends StatelessWidget {
+  const VerificationScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Safe-Deals Verification'),
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(20),
+        children: [
+          const Icon(
+            Icons.verified,
+            size: 90,
+            color: Colors.green,
+          ),
+          const SizedBox(height: 18),
+          const Center(
+            child: Text(
+              'Verification Complete',
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 30),
+          const VerificationItem(
+            title: 'Mobile Number',
+            status: 'Verified',
+          ),
+          const VerificationItem(
+            title: 'Bank Account',
+            status: 'Verified',
+          ),
+          const VerificationItem(
+            title: 'Live Selfie',
+            status: 'Verified',
+          ),
+          const SizedBox(height: 25),
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: Colors.green.shade50,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: const Text(
+              'Aapka Safe-Deals verification process complete hai.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ============================================================
+// VERIFICATION ITEM
+// ============================================================
+
+class VerificationItem extends StatelessWidget {
+  final String title;
+  final String status;
+
+  const VerificationItem({
+    required this.title,
+    required this.status,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: ListTile(
+        leading: const Icon(
+          Icons.check_circle,
+          color: Colors.green,
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        trailing: Text(
+          status,
+          style: const TextStyle(
+            color: Colors.green,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ============================================================
+// PROFILE SELFIE PAGE SHELL
+// ============================================================
+
+class PageShell extends StatelessWidget {
+  final String title;
+  final Color color;
+  final Widget child;
+
+  const PageShell(
+    this.title,
+    this.color,
+    this.child, {
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: color,
+        foregroundColor: Colors.white,
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
