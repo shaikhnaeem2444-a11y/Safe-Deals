@@ -45,7 +45,7 @@ jobs:
           )
 
           p.write_text(text)
-          print("Version set to 1.0.3+11")
+          print("Version set to 1.0.4+12")
           PY
 
       - name: Decode existing signing keystore
