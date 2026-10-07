@@ -38,7 +38,7 @@ jobs:
 
           text = re.sub(
               r'^version:\s*.*$',
-              'version: 1.0.3+11',
+              'version: 1.0.4+12',
               text,
               count=1,
               flags=re.MULTILINE
