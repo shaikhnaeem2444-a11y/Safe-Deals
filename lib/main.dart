@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(const SafeDealsApp());
 }
 
@@ -15,15 +12,19 @@ class SafeDealsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Safe-Deals',
+      title: 'Safe Deals',
       theme: ThemeData(
-        useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        useMaterial3: true,
       ),
       home: const WelcomeScreen(),
     );
   }
 }
+
+// ============================================================
+// WELCOME
+// ============================================================
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -31,55 +32,63 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 30),
-              CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.green.shade50,
-                child: Icon(
-                  Icons.verified_user,
-                  size: 60,
-                  color: Colors.green.shade700,
-                ),
+              const SizedBox(height: 35),
+              const Icon(
+                Icons.verified_user,
+                size: 85,
+                color: Colors.green,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               const Text(
-                'Welcome to Safe-Deals',
-                textAlign: TextAlign.center,
+                'Welcome to Safe Deals',
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 27,
                   fontWeight: FontWeight.bold,
                 ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'Aapka secure vehicle marketplace.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey.shade700),
               ),
-              const SizedBox(height: 30),
-              const InfoTile(
-                Icons.lock_outline,
-                'Subscription Required',
-                'Secure access ke liye subscription zaroori hai.',
+              const SizedBox(height: 10),
+              Text(
+                'Aapka secure aur trusted vehicle marketplace.',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey.shade700,
+                ),
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 12),
-              const InfoTile(
-                Icons.account_balance_outlined,
-                'Bank-Linked Number',
-                'Bank se linked mobile number use karein.',
+              const SizedBox(height: 35),
+
+              const TrustFeature(
+                icon: Icons.lock_outline,
+                title: 'Secure Platform',
+                subtitle: 'Safe aur trusted vehicle transactions.',
               ),
-              const SizedBox(height: 12),
-              const InfoTile(
-                Icons.camera_alt_outlined,
-                'Live Selfie Profile',
-                'Real user verification ke liye selfie.',
+
+              const SizedBox(height: 14),
+
+              const TrustFeature(
+                icon: Icons.account_balance,
+                title: 'Bank Verification',
+                subtitle: 'Secure verification ke liye bank details.',
               ),
-              const SizedBox(height: 30),
+
+              const SizedBox(height: 14),
+
+              const TrustFeature(
+                icon: Icons.camera_alt_outlined,
+                title: 'Live Selfie Verification',
+                subtitle: 'Profile verification ke liye live selfie.',
+              ),
+
+              const SizedBox(height: 40),
+
               SizedBox(
                 width: double.infinity,
                 height: 54,
@@ -92,6 +101,10 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     );
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                  ),
                   child: const Text(
                     'Aage Badhein (Continue)',
                     style: TextStyle(
@@ -109,31 +122,35 @@ class WelcomeScreen extends StatelessWidget {
   }
 }
 
-class InfoTile extends StatelessWidget {
+class TrustFeature extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
 
-  const InfoTile(
-    this.icon,
-    this.title,
-    this.subtitle, {
+  const TrustFeature({
     super.key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CircleAvatar(
-          backgroundColor: Colors.green.shade50,
+        Container(
+          padding: const EdgeInsets.all(11),
+          decoration: BoxDecoration(
+            color: Colors.green.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Icon(
             icon,
-            color: Colors.green.shade700,
+            color: Colors.green,
+            size: 28,
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 14),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,6 +158,7 @@ class InfoTile extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -148,6 +166,7 @@ class InfoTile extends StatelessWidget {
               Text(
                 subtitle,
                 style: TextStyle(
+                  fontSize: 13,
                   color: Colors.grey.shade700,
                 ),
               ),
@@ -159,6 +178,10 @@ class InfoTile extends StatelessWidget {
   }
 }
 
+// ============================================================
+// BANK LINKING
+// ============================================================
+
 class BankLinkingScreen extends StatefulWidget {
   const BankLinkingScreen({super.key});
 
@@ -167,34 +190,24 @@ class BankLinkingScreen extends StatefulWidget {
 }
 
 class _BankLinkingScreenState extends State<BankLinkingScreen> {
-  final account = TextEditingController();
-  final ifsc = TextEditingController();
-  final mobile = TextEditingController();
+  final accountController = TextEditingController();
+  final ifscController = TextEditingController();
 
   @override
   void dispose() {
-    account.dispose();
-    ifsc.dispose();
-    mobile.dispose();
+    accountController.dispose();
+    ifscController.dispose();
     super.dispose();
   }
 
-  void verify() {
-    if (account.text.trim().isEmpty ||
-        ifsc.text.trim().isEmpty ||
-        mobile.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please sabhi details fill karein.'),
-        ),
-      );
-      return;
-    }
+  void _continue() {
+    final account = accountController.text.trim();
+    final ifsc = ifscController.text.trim();
 
-    if (mobile.text.trim().length < 10) {
+    if (account.isEmpty || ifsc.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Valid mobile number enter karein.'),
+          content: Text('Account Number aur IFSC Code enter karein.'),
         ),
       );
       return;
@@ -213,69 +226,83 @@ class _BankLinkingScreenState extends State<BankLinkingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bank Account Linking'),
-        backgroundColor: Colors.green.shade700,
+        backgroundColor: Colors.blueAccent,
         foregroundColor: Colors.white,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          const Text(
-            'Apna Bank Account Jodein',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'Apna Bank Account Jodein',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Safe Deals par secure verification ke liye bank details enter karein.',
+                style: TextStyle(
+                  color: Colors.grey.shade700,
+                ),
+              ),
+              const SizedBox(height: 28),
+
+              TextField(
+                controller: accountController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Account Number',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.account_balance),
+                ),
+              ),
+
+              const SizedBox(height: 18),
+
+              TextField(
+                controller: ifscController,
+                textCapitalization: TextCapitalization.characters,
+                decoration: const InputDecoration(
+                  labelText: 'IFSC Code',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.code),
+                ),
+              ),
+
+              const Spacer(),
+
+              SizedBox(
+                height: 54,
+                child: ElevatedButton(
+                  onPressed: _continue,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text(
+                    'Verify & Continue',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Secure verification ke liye details enter karein.',
-            style: TextStyle(
-              color: Colors.grey.shade700,
-            ),
-          ),
-          const SizedBox(height: 24),
-          TextField(
-            controller: account,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              labelText: 'Account Number',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.account_balance),
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: ifsc,
-            textCapitalization: TextCapitalization.characters,
-            decoration: const InputDecoration(
-              labelText: 'IFSC Code',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.code),
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: mobile,
-            keyboardType: TextInputType.phone,
-            decoration: const InputDecoration(
-              labelText: 'Bank-Linked Mobile Number',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.phone),
-            ),
-          ),
-          const SizedBox(height: 24),
-          SizedBox(
-            height: 52,
-            child: ElevatedButton(
-              onPressed: verify,
-              child: const Text('Verify & Link Bank'),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
+
+// ============================================================
+// SELFIE VERIFICATION
+// ============================================================
 
 class ProfileSelfieScreen extends StatefulWidget {
   const ProfileSelfieScreen({super.key});
@@ -285,109 +312,108 @@ class ProfileSelfieScreen extends StatefulWidget {
 }
 
 class _ProfileSelfieScreenState extends State<ProfileSelfieScreen> {
-  CameraController? controller;
-  XFile? selfie;
-  bool ready = false;
-  bool opening = true;
-  String? error;
+  CameraController? _cameraController;
+
+  bool _cameraReady = false;
+  bool _photoTaken = false;
+  bool _cameraError = false;
 
   @override
   void initState() {
     super.initState();
-    openCamera();
+    _openCamera();
   }
 
-  Future<void> openCamera() async {
-    if (mounted) {
-      setState(() {
-        opening = true;
-        error = null;
-      });
-    }
-
+  Future<void> _openCamera() async {
     try {
       final cameras = await availableCameras();
 
       if (cameras.isEmpty) {
-        throw Exception('No camera');
+        if (mounted) {
+          setState(() {
+            _cameraError = true;
+          });
+        }
+        return;
       }
 
-      CameraDescription selected = cameras.first;
+      CameraDescription selectedCamera = cameras.first;
 
       for (final camera in cameras) {
         if (camera.lensDirection == CameraLensDirection.front) {
-          selected = camera;
+          selectedCamera = camera;
           break;
         }
       }
 
-      final newController = CameraController(
-        selected,
+      final controller = CameraController(
+        selectedCamera,
         ResolutionPreset.medium,
         enableAudio: false,
       );
 
-      await newController.initialize();
-
-      await controller?.dispose();
+      await controller.initialize();
 
       if (!mounted) {
-        await newController.dispose();
+        await controller.dispose();
         return;
       }
 
-      setState(() {
-        controller = newController;
-        ready = true;
-        opening = false;
-      });
-    } catch (_) {
-      if (!mounted) return;
+      _cameraController = controller;
 
       setState(() {
-        ready = false;
-        opening = false;
-        error = 'Camera open nahi ho saka. Permission check karein.';
+        _cameraReady = true;
+        _cameraError = false;
       });
+    } catch (e) {
+      debugPrint('Camera error: $e');
+
+      if (mounted) {
+        setState(() {
+          _cameraError = true;
+        });
+      }
     }
   }
 
-  Future<void> capture() async {
-    final camera = controller;
+  Future<void> _takeSelfie() async {
+    final controller = _cameraController;
 
-    if (camera == null ||
-        !camera.value.isInitialized ||
-        camera.value.isTakingPicture) {
+    if (controller == null || !controller.value.isInitialized) {
       return;
     }
 
     try {
-      final file = await camera.takePicture();
+      await controller.takePicture();
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       setState(() {
-        selfie = file;
+        _photoTaken = true;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Selfie successfully captured.'),
+          content: Text('Selfie successfully captured!'),
         ),
       );
-    } catch (_) {
-      if (!mounted) return;
+    } catch (e) {
+      debugPrint('Selfie error: $e');
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Selfie capture failed.'),
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Selfie capture nahi ho saki. Dobara try karein.'),
+          ),
+        );
+      }
     }
   }
 
-  void complete() {
-    if (selfie == null) {
+  void _completeVerification() {
+    if (!_photoTaken) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Pehle selfie capture karein.'),
@@ -401,120 +427,148 @@ class _ProfileSelfieScreenState extends State<ProfileSelfieScreen> {
       MaterialPageRoute(
         builder: (_) => const HomeScreen(),
       ),
-      (_) => false,
+      (route) => false,
     );
   }
 
   @override
   void dispose() {
-    controller?.dispose();
+    _cameraController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final captured = selfie != null;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile Selfie Verification'),
         backgroundColor: Colors.teal,
         foregroundColor: Colors.white,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: captured
-                    ? Image.file(
-                        File(selfie!.path),
-                        width: double.infinity,
-                        fit: BoxFit.cover,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Expanded(
+                child: _cameraError
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.camera_alt_outlined,
+                              size: 70,
+                              color: Colors.red,
+                            ),
+                            const SizedBox(height: 15),
+                            const Text(
+                              'Camera open nahi ho saka.',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 15),
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _cameraError = false;
+                                });
+                                _openCamera();
+                              },
+                              child: const Text('Dobara Try Karein'),
+                            ),
+                          ],
+                        ),
                       )
-                    : ready
-                        ? CameraPreview(controller!)
-                        : Center(
-                            child: opening
-                                ? const CircularProgressIndicator()
-                                : Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        error ??
-                                            'Camera ready nahi hai.',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      OutlinedButton(
-                                        onPressed: openCamera,
-                                        child: const Text(
-                                          'Camera Dobara Kholein',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                    : _cameraReady && _cameraController != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(18),
+                            child: CameraPreview(
+                              _cameraController!,
+                            ),
+                          )
+                        : const Center(
+                            child: CircularProgressIndicator(),
                           ),
               ),
-            ),
-            const SizedBox(height: 14),
-            Text(
-              captured
-                  ? 'Selfie Successfully Captured'
-                  : 'Apni Live Selfie Capture Karein',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 21,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: ElevatedButton.icon(
-                onPressed: ready
-                    ? (captured
-                        ? () {
-                            setState(() {
-                              selfie = null;
-                            });
-                          }
-                        : capture)
-                    : null,
-                icon: Icon(
-                  captured ? Icons.refresh : Icons.camera_alt,
-                ),
-                label: Text(
-                  captured
-                      ? 'Selfie Dobara Khinchein'
-                      : 'Selfie Khinchein',
+
+              const SizedBox(height: 15),
+
+              Text(
+                _photoTaken
+                    ? 'Selfie Successfully Captured ✓'
+                    : 'Apni Live Selfie Capture Karein',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold,
+                  color: _photoTaken ? Colors.green : Colors.black87,
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: OutlinedButton(
-                onPressed: captured ? complete : null,
-                child: const Text(
-                  'Verification Complete Karein',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
+
+              const SizedBox(height: 8),
+
+              Text(
+                _photoTaken
+                    ? 'Aapki selfie verification ke liye ready hai.'
+                    : 'Clear live selfie capture karein.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.grey.shade700,
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton.icon(
+                  onPressed: _cameraReady ? _takeSelfie : null,
+                  icon: const Icon(Icons.camera_alt),
+                  label: Text(
+                    _photoTaken
+                        ? 'Selfie Dobara Khinchein'
+                        : 'Selfie Khinchein',
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.teal,
+                    foregroundColor: Colors.white,
                   ),
                 ),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 12),
+
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: OutlinedButton(
+                  onPressed: _completeVerification,
+                  child: const Text(
+                    'Verification Complete Karein',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 8),
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+// ============================================================
+// HOME
+// ============================================================
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -523,380 +577,385 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Safe-Deals'),
-        backgroundColor: Colors.green.shade700,
+        title: const Text(
+          'Safe-Deals',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.green.shade50,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.verified,
-                  color: Colors.green,
-                  size: 48,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.green.shade50,
+                  borderRadius: BorderRadius.circular(18),
                 ),
-                SizedBox(height: 8),
-                Text(
-                  'Welcome to Safe-Deals',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.verified_user,
+                      color: Colors.green,
+                      size: 48,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Welcome to Safe-Deals',
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      'Verified vehicle marketplace',
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 22),
+
+              const Text(
+                'What would you like to do?',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 15),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: _HomeCard(
+                      icon: Icons.directions_car,
+                      title: 'Buy Vehicle',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const VehicleCategoryScreen(
+                              mode: 'buy',
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(height: 5),
-                Text('Aapka verification complete hai.'),
-              ],
-            ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _HomeCard(
+                      icon: Icons.sell,
+                      title: 'Sell Vehicle',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const VehicleCategoryScreen(
+                              mode: 'sell',
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 14),
+
+              _HomeCard(
+                icon: Icons.person_outline,
+                title: 'My Profile',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ProfileScreen(),
+                    ),
+                  );
+                },
+              ),
+
+              const SizedBox(height: 14),
+
+              _HomeCard(
+                icon: Icons.verified,
+                title: 'Safe-Deals Verification',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const VerificationStatusScreen(),
+                    ),
+                  );
+                },
+              ),
+
+              const SizedBox(height: 14),
+
+              _HomeCard(
+                icon: Icons.chat,
+                title: 'Chat & Offers',
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ChatScreen(),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
-          const Text(
-            'Vehicle Marketplace',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          ActionCard(
-            Icons.directions_car,
-            'Buy Vehicle',
-            'Vehicles browse karein',
-            () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const VehicleCategories(),
-                ),
-              );
-            },
-          ),
-          ActionCard(
-            Icons.sell,
-            'Sell Vehicle',
-            'Apni vehicle list karein',
-            () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const SellVehicleScreen(),
-                ),
-              );
-            },
-          ),
-          ActionCard(
-            Icons.person,
-            'My Profile',
-            'Profile details dekhein',
-            () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const ProfileScreen(),
-                ),
-              );
-            },
-          ),
-          ActionCard(
-            Icons.security,
-            'Safe-Deals Verification',
-            'Verification status dekhein',
-            () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const VerificationScreen(),
-                ),
-              );
-            },
-          ),
-        ],
+        ),
       ),
     );
   }
 }
 
-class ActionCard extends StatelessWidget {
+class _HomeCard extends StatelessWidget {
   final IconData icon;
   final String title;
-  final String subtitle;
   final VoidCallback onTap;
 
-  const ActionCard(
-    this.icon,
-    this.title,
-    this.subtitle,
-    this.onTap, {
-    super.key,
+  const _HomeCard({
+    required this.icon,
+    required this.title,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.green.shade50,
-          child: Icon(
-            icon,
-            color: Colors.green,
-          ),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        subtitle: Text(subtitle),
-        trailing: const Icon(
-          Icons.arrow_forward_ios,
-          size: 16,
-        ),
+      elevation: 2,
+      child: InkWell(
         onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.green.shade50,
+                child: Icon(
+                  icon,
+                  color: Colors.green,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
-class VehicleCategories extends StatelessWidget {
-  const VehicleCategories({super.key});
+// ============================================================
+// VEHICLE CATEGORIES
+// ============================================================
 
-  static const items = [
-    ('Cars', Icons.directions_car),
-    ('Bikes', Icons.two_wheeler),
-    ('Scooters', Icons.electric_scooter),
-    ('Tractors', Icons.agriculture),
-    ('Trucks', Icons.local_shipping),
-    ('Buses', Icons.directions_bus),
-    ('Vans', Icons.airport_shuttle),
-    ('Auto Rickshaw', Icons.electric_rickshaw),
-  ];
+class VehicleCategoryScreen extends StatelessWidget {
+  final String mode;
+
+  const VehicleCategoryScreen({
+    super.key,
+    required this.mode,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final isSell = mode == 'sell';
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Vehicle Categories'),
-        backgroundColor: Colors.green.shade700,
+        title: Text(
+          isSell ? 'Sell Vehicle' : 'Buy Vehicle',
+        ),
+        backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: items.length,
-        gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-        ),
-        itemBuilder: (_, index) {
-          return Card(
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        VehicleListScreen(items[index].$1),
-                  ),
-                );
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    items[index].$2,
-                    size: 40,
-                    color: Colors.green,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    items[index].$1,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                isSell
+                    ? 'Vehicle Type Chunein'
+                    : 'Vehicle Search Karein',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              _categoryButton(
+                context,
+                Icons.two_wheeler,
+                '2-Wheeler (Bike / Scooty)',
+                isSell,
+              ),
+
+              const SizedBox(height: 14),
+
+              _categoryButton(
+                context,
+                Icons.directions_car,
+                '4-Wheeler (Car / Jeep)',
+                isSell,
+              ),
+
+              const SizedBox(height: 14),
+
+              _categoryButton(
+                context,
+                Icons.local_shipping,
+                'Commercial / Heavy Vehicle',
+                isSell,
+              ),
+
+              const SizedBox(height: 14),
+
+              _categoryButton(
+                context,
+                Icons.agriculture,
+                'Tractor / Agricultural',
+                isSell,
+              ),
+
+              const SizedBox(height: 20),
+
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const ChatScreen(),
                     ),
-                  ),
-                ],
+                  );
+                },
+                icon: const Icon(Icons.chat),
+                label: const Text('Chat & Offers'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _categoryButton(
+    BuildContext context,
+    IconData icon,
+    String title,
+    bool isSell,
+  ) {
+    return SizedBox(
+      height: 55,
+      child: ElevatedButton.icon(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => VehicleFormScreen(
+                categoryTitle: title,
+                isSell: isSell,
               ),
             ),
           );
         },
+        icon: Icon(icon),
+        label: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 15,
+          ),
+        ),
       ),
     );
   }
 }
 
-class VehicleListScreen extends StatelessWidget {
-  final String category;
+// ============================================================
+// VEHICLE FORM
+// ============================================================
 
-  const VehicleListScreen(
-    this.category, {
+class VehicleFormScreen extends StatefulWidget {
+  final String categoryTitle;
+  final bool isSell;
+
+  const VehicleFormScreen({
     super.key,
+    required this.categoryTitle,
+    required this.isSell,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(category),
-        backgroundColor: Colors.green.shade700,
-        foregroundColor: Colors.white,
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          for (final name in [
-            '$category - Verified Model 2024',
-            '$category - Verified Model 2023',
-            '$category - Verified Model 2022',
-          ])
-            Card(
-              margin: const EdgeInsets.only(bottom: 12),
-              child: ListTile(
-                leading: const CircleAvatar(
-                  child: Icon(Icons.directions_car),
-                ),
-                title: Text(name),
-                subtitle: const Text('Verified vehicle'),
-                trailing: const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 16,
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => VehicleDetails(name),
-                    ),
-                  );
-                },
-              ),
-            ),
-        ],
-      ),
-    );
-  }
+  State<VehicleFormScreen> createState() => _VehicleFormScreenState();
 }
 
-class VehicleDetails extends StatelessWidget {
-  final String name;
-
-  const VehicleDetails(
-    this.name, {
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Vehicle Details'),
-        backgroundColor: Colors.green.shade700,
-        foregroundColor: Colors.white,
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          Container(
-            height: 190,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: const Icon(
-              Icons.directions_car,
-              size: 80,
-              color: Colors.green,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            name,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-          const Text('Verification: Verified'),
-          const Text('Documents: Available'),
-          const Text('Seller: Verified Seller'),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Enquiry submitted.'),
-                ),
-              );
-            },
-            child: const Text('Enquire Now'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SellVehicleScreen extends StatefulWidget {
-  const SellVehicleScreen({super.key});
-
-  @override
-  State<SellVehicleScreen> createState() =>
-      _SellVehicleScreenState();
-}
-
-class _SellVehicleScreenState extends State<SellVehicleScreen> {
-  final name = TextEditingController();
-  final price = TextEditingController();
-  final city = TextEditingController();
+class _VehicleFormScreenState extends State<VehicleFormScreen> {
+  final modelController = TextEditingController();
+  final priceController = TextEditingController();
+  final kmController = TextEditingController();
+  final colourController = TextEditingController();
+  final fuelController = TextEditingController();
 
   @override
   void dispose() {
-    name.dispose();
-    price.dispose();
-    city.dispose();
+    modelController.dispose();
+    priceController.dispose();
+    kmController.dispose();
+    colourController.dispose();
+    fuelController.dispose();
     super.dispose();
   }
 
-  void submit() {
-    if (name.text.trim().isEmpty ||
-        price.text.trim().isEmpty ||
-        city.text.trim().isEmpty) {
+  void _submit() {
+    if (modelController.text.trim().isEmpty ||
+        priceController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Please sabhi details fill karein.'),
+          content: Text('Model aur Price enter karein.'),
         ),
       );
       return;
     }
 
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Listing Ready'),
-        content: const Text(
-          'Vehicle listing details save ho gayi hain.',
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          widget.isSell
+              ? 'Vehicle listing ready hai.'
+              : 'Vehicle search ready hai.',
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-            child: const Text('OK'),
-          ),
-        ],
       ),
     );
   }
@@ -905,73 +964,101 @@ class _SellVehicleScreenState extends State<SellVehicleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sell Vehicle'),
-        backgroundColor: Colors.green.shade700,
+        title: Text(widget.categoryTitle),
+        backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          const Text(
-            'Apni Vehicle List Karein',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 18),
-          TextField(
-            controller: name,
-            decoration: const InputDecoration(
-              labelText: 'Vehicle Name / Model',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: price,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              labelText: 'Expected Price',
-              border: OutlineInputBorder(),
-              prefixText: '₹ ',
-            ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: city,
-            decoration: const InputDecoration(
-              labelText: 'City / Location',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(height: 20),
-          OutlinedButton.icon(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    'Photo upload ready for backend integration.',
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                widget.isSell
+                    ? 'Vehicle ki details bharein'
+                    : 'Vehicle details search karein',
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 18),
+
+              _field(
+                controller: modelController,
+                label: 'Model',
+              ),
+
+              _field(
+                controller: priceController,
+                label: 'Price (₹)',
+                keyboardType: TextInputType.number,
+              ),
+
+              _field(
+                controller: kmController,
+                label: 'Kilometers Driven',
+                keyboardType: TextInputType.number,
+              ),
+
+              _field(
+                controller: colourController,
+                label: 'Colour',
+              ),
+
+              _field(
+                controller: fuelController,
+                label: 'Fuel Type',
+              ),
+
+              const SizedBox(height: 15),
+
+              SizedBox(
+                height: 54,
+                child: ElevatedButton(
+                  onPressed: _submit,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: Text(
+                    widget.isSell
+                        ? 'Ad Live Karein'
+                        : 'Vehicle Search Karein',
                   ),
                 ),
-              );
-            },
-            icon: const Icon(Icons.add_a_photo),
-            label: const Text('Vehicle Photos Add Karein'),
+              ),
+            ],
           ),
-          const SizedBox(height: 14),
-          SizedBox(
-            height: 52,
-            child: ElevatedButton(
-              onPressed: submit,
-              child: const Text('Submit Vehicle Listing'),
-            ),
-          ),
-        ],
+        ),
+      ),
+    );
+  }
+
+  Widget _field({
+    required TextEditingController controller,
+    required String label,
+    TextInputType? keyboardType,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: TextField(
+        controller: controller,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+        ),
       ),
     );
   }
 }
+
+// ============================================================
+// PROFILE
+// ============================================================
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -981,54 +1068,67 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Profile'),
-        backgroundColor: Colors.green.shade700,
+        backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: const [
-          CircleAvatar(
+        padding: const EdgeInsets.all(18),
+        children: [
+          const CircleAvatar(
             radius: 48,
-            backgroundColor: Color(0xFFE8F5E9),
             child: Icon(
               Icons.person,
               size: 55,
-              color: Colors.green,
             ),
           ),
-          SizedBox(height: 16),
-          Center(
+
+          const SizedBox(height: 18),
+
+          const Center(
             child: Text(
-              'Verified Safe-Deals User',
+              'Safe Deals User',
               style: TextStyle(
-                fontSize: 21,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          SizedBox(height: 20),
-          ListTile(
-            leading: Icon(
-              Icons.account_balance,
-              color: Colors.green,
-            ),
-            title: Text('Bank Verification'),
-            subtitle: Text('Completed'),
-            trailing: Icon(
-              Icons.verified,
-              color: Colors.green,
+
+          const SizedBox(height: 25),
+
+          Card(
+            child: ListTile(
+              leading: const Icon(
+                Icons.verified,
+                color: Colors.green,
+              ),
+              title: const Text('Selfie Verification'),
+              subtitle: const Text('Completed'),
+              trailing: const Icon(
+                Icons.check_circle,
+                color: Colors.green,
+              ),
             ),
           ),
-          ListTile(
-            leading: Icon(
-              Icons.camera_alt,
-              color: Colors.green,
+
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.account_balance),
+              title: const Text('Bank Verification'),
+              subtitle: const Text('Verified'),
+              trailing: const Icon(
+                Icons.check_circle,
+                color: Colors.green,
+              ),
             ),
-            title: Text('Selfie Verification'),
-            subtitle: Text('Completed'),
-            trailing: Icon(
-              Icons.verified,
-              color: Colors.green,
+          ),
+
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.security),
+              title: const Text('Safe Deals Account'),
+              subtitle: const Text('Secure profile'),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             ),
           ),
         ],
@@ -1037,59 +1137,178 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-class VerificationScreen extends StatelessWidget {
-  const VerificationScreen({super.key});
+// ============================================================
+// VERIFICATION STATUS
+// ============================================================
+
+class VerificationStatusScreen extends StatelessWidget {
+  const VerificationStatusScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Safe-Deals Verification'),
-        backgroundColor: Colors.green.shade700,
+        title: const Text('Verification Status'),
+        backgroundColor: Colors.teal,
         foregroundColor: Colors.white,
       ),
-      body: ListView(
+      body: Padding(
         padding: const EdgeInsets.all(20),
-        children: const [
-          Icon(
-            Icons.verified,
-            size: 90,
-            color: Colors.green,
-          ),
-          SizedBox(height: 12),
-          Center(
-            child: Text(
+        child: Column(
+          children: [
+            const SizedBox(height: 30),
+            const Icon(
+              Icons.verified,
+              color: Colors.green,
+              size: 90,
+            ),
+            const SizedBox(height: 20),
+            const Text(
               'Verification Complete',
               style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          SizedBox(height: 24),
-          ListTile(
-            leading: Icon(
-              Icons.check_circle,
-              color: Colors.green,
+            const SizedBox(height: 12),
+            Text(
+              'Aapki Safe Deals profile verification complete hai.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey.shade700,
+              ),
             ),
-            title: Text('Bank Account'),
-            subtitle: Text('Completed'),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.check_circle,
-              color: Colors.green,
+            const SizedBox(height: 30),
+            const ListTile(
+              leading: Icon(
+                Icons.account_balance,
+                color: Colors.green,
+              ),
+              title: Text('Bank Verification'),
+              trailing: Icon(
+                Icons.check_circle,
+                color: Colors.green,
+              ),
             ),
-            title: Text('Live Selfie'),
-            subtitle: Text('Completed'),
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.check_circle,
-              color: Colors.green,
+            const ListTile(
+              leading: Icon(
+                Icons.camera_alt,
+                color: Colors.green,
+              ),
+              title: Text('Selfie Verification'),
+              trailing: Icon(
+                Icons.check_circle,
+                color: Colors.green,
+              ),
             ),
-            title: Text('Profile'),
-            subtitle: Text('Verified'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ============================================================
+// CHAT
+// ============================================================
+
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key});
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  final messageController = TextEditingController();
+
+  final List<String> messages = [
+    'Bhai, kya yeh price thoda kam ho sakta hai?',
+    'Theek hai, final deal batao.',
+  ];
+
+  @override
+  void dispose() {
+    messageController.dispose();
+    super.dispose();
+  }
+
+  void _sendMessage() {
+    final message = messageController.text.trim();
+
+    if (message.isEmpty) {
+      return;
+    }
+
+    setState(() {
+      messages.add(message);
+    });
+
+    messageController.clear();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Chat & Offers'),
+        backgroundColor: Colors.teal,
+        foregroundColor: Colors.white,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                final mine = index >= 2;
+
+                return Align(
+                  alignment: mine
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: mine
+                          ? Colors.teal.shade100
+                          : Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(messages[index]),
+                  ),
+                );
+              },
+            ),
+          ),
+
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: messageController,
+                      decoration: const InputDecoration(
+                        hintText: 'Message ya offer likhein...',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    onPressed: _sendMessage,
+                    icon: const Icon(
+                      Icons.send,
+                      color: Colors.teal,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
