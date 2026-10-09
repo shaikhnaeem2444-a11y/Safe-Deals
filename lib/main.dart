@@ -1068,7 +1068,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Profile'),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.red,
         foregroundColor: Colors.white,
       ),
       body: ListView(
@@ -1100,13 +1100,13 @@ class ProfileScreen extends StatelessWidget {
             child: ListTile(
               leading: const Icon(
                 Icons.verified,
-                color: Colors.green,
+                color: Colors.red,
               ),
               title: const Text('Selfie Verification'),
               subtitle: const Text('Completed'),
               trailing: const Icon(
                 Icons.check_circle,
-                color: Colors.green,
+                color: Colors.red,
               ),
             ),
           ),
@@ -1118,7 +1118,7 @@ class ProfileScreen extends StatelessWidget {
               subtitle: const Text('Verified'),
               trailing: const Icon(
                 Icons.check_circle,
-                color: Colors.green,
+                color: Colors.red,
               ),
             ),
           ),
