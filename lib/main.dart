@@ -43,7 +43,7 @@ class WelcomeScreen extends StatelessWidget {
               const Icon(
                 Icons.verified_user,
                 size: 85,
-                color: Colors.green,
+                color: Colors.red,
               ),
               const SizedBox(height: 20),
               const Text(
