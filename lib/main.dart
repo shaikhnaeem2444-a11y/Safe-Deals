@@ -1149,7 +1149,7 @@ class VerificationStatusScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verification Status'),
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.red,
         foregroundColor: Colors.white,
       ),
       body: Padding(
@@ -1159,7 +1159,7 @@ class VerificationStatusScreen extends StatelessWidget {
             const SizedBox(height: 30),
             const Icon(
               Icons.verified,
-              color: Colors.green,
+              color: Colors.red,
               size: 90,
             ),
             const SizedBox(height: 20),
@@ -1182,23 +1182,23 @@ class VerificationStatusScreen extends StatelessWidget {
             const ListTile(
               leading: Icon(
                 Icons.account_balance,
-                color: Colors.green,
+                color: Colors.red,
               ),
               title: Text('Bank Verification'),
               trailing: Icon(
                 Icons.check_circle,
-                color: Colors.green,
+                color: Colors.red,
               ),
             ),
             const ListTile(
               leading: Icon(
                 Icons.camera_alt,
-                color: Colors.green,
+                color: Colors.red,
               ),
               title: Text('Selfie Verification'),
               trailing: Icon(
                 Icons.check_circle,
-                color: Colors.green,
+                color: Colors.red,
               ),
             ),
           ],
