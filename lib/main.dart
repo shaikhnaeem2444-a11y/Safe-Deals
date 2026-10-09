@@ -102,7 +102,7 @@ class WelcomeScreen extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                    backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
                   ),
                   child: const Text(
