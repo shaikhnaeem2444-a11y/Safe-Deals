@@ -965,7 +965,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.categoryTitle),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.red,
         foregroundColor: Colors.white,
       ),
       body: SafeArea(
@@ -1020,7 +1020,7 @@ class _VehicleFormScreenState extends State<VehicleFormScreen> {
                 child: ElevatedButton(
                   onPressed: _submit,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
+                    backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
                   ),
                   child: Text(
