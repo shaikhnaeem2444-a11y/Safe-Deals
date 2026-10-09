@@ -1252,7 +1252,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chat & Offers'),
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.red,
         foregroundColor: Colors.white,
       ),
       body: Column(
@@ -1303,7 +1303,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     onPressed: _sendMessage,
                     icon: const Icon(
                       Icons.send,
-                      color: Colors.teal,
+                      color: Colors.red,
                     ),
                   ),
                 ],
