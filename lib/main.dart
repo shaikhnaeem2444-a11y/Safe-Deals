@@ -14,7 +14,7 @@ class SafeDealsApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Safe Deals',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         useMaterial3: true,
       ),
       home: const WelcomeScreen(),
